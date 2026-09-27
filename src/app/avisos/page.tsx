@@ -16,12 +16,14 @@ export default async function AvisosPage() {
         {posts.map((post) => (
           <div key={post.id} className="rounded-2xl border border-border overflow-hidden">
             {post.image_path && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={getPublicImageUrl("posts", post.image_path)}
-                alt=""
-                className="w-full max-h-96 object-cover"
-              />
+              <div className="bg-surface flex justify-center max-h-[560px] overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={getPublicImageUrl("posts", post.image_path)}
+                  alt=""
+                  className="max-w-full max-h-[560px] object-contain"
+                />
+              </div>
             )}
             <div className="p-6">
               {post.event_date && (

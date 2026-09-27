@@ -113,12 +113,14 @@ export default async function HomePage() {
                 className="block rounded-2xl border border-border overflow-hidden hover:border-foreground/30 transition-colors"
               >
                 {post.image_path && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={getPublicImageUrl("posts", post.image_path)}
-                    alt=""
-                    className="w-full aspect-video object-cover"
-                  />
+                  <div className="aspect-[4/3] bg-surface flex items-center justify-center overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={getPublicImageUrl("posts", post.image_path)}
+                      alt=""
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  </div>
                 )}
                 <div className="p-5">
                   {post.event_date && (
