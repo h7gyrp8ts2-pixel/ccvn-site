@@ -1,5 +1,5 @@
 import { getSiteSettings } from "@/lib/site-settings";
-import { getBucketImages } from "@/lib/photos";
+import { getBucketImages, getPublicImageUrl } from "@/lib/photos";
 import { updateSiteSettingsAction } from "@/app/admin/actions";
 import { GalleryUploadForm } from "@/components/gallery-upload-form";
 import { AdminImageGrid } from "@/components/admin-image-grid";
@@ -82,6 +82,32 @@ export default async function AdminConteudoPage() {
             defaultValue={settings.hero_subtitle}
             className="w-full rounded-lg border border-border px-3 py-2 bg-surface"
           />
+        </div>
+        {settings.hero_photo_path && (
+          <div className="flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={getPublicImageUrl("hero", settings.hero_photo_path)}
+              alt=""
+              className="w-32 h-20 object-cover rounded-lg border border-border"
+            />
+            <label className="flex items-center gap-2 text-sm text-muted">
+              <input type="checkbox" name="remove_hero_photo" />
+              remover foto de fundo
+            </label>
+          </div>
+        )}
+        <div>
+          <label className="block text-sm text-muted mb-1">
+            {settings.hero_photo_path
+              ? "Trocar foto de fundo do hero"
+              : "Foto de fundo do hero (opcional)"}
+          </label>
+          <input type="file" name="hero_photo" accept="image/*" />
+          <p className="mt-1 text-xs text-muted">
+            Quando tiver uma foto, ela vira o fundo da seção inicial da home,
+            com o texto sobreposto e um escurecido para manter a leitura.
+          </p>
         </div>
         <div>
           <button

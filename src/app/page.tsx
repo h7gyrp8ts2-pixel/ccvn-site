@@ -16,29 +16,68 @@ export default async function HomePage() {
     getPosts(3),
   ]);
 
+  const heroPhotoUrl = settings.hero_photo_path
+    ? getPublicImageUrl("hero", settings.hero_photo_path)
+    : null;
+
   return (
     <div>
-      <section className="mx-auto max-w-6xl px-6 py-24 md:py-32 text-center">
-        <div className="flex justify-center">
-          <Logo variant="wordmark" />
-        </div>
-        <p className="mt-8 font-script text-3xl text-accent">{settings.hero_subtitle}</p>
-        <h1 className="mt-4 font-serif text-3xl md:text-5xl max-w-3xl mx-auto text-balance">
-          {settings.hero_title}
-        </h1>
-        <div className="mt-10 flex items-center justify-center gap-4">
-          <Link
-            href="/sobre"
-            className="rounded-full border border-foreground px-6 py-3 text-sm hover:bg-foreground hover:text-background transition-colors"
+      <section
+        className={`relative overflow-hidden text-center ${
+          heroPhotoUrl
+            ? "min-h-[520px] md:min-h-[640px] flex items-center justify-center px-6"
+            : "mx-auto max-w-6xl px-6 py-24 md:py-32"
+        }`}
+      >
+        {heroPhotoUrl && (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={heroPhotoUrl}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/50" />
+          </>
+        )}
+        <div className={heroPhotoUrl ? "relative z-10" : ""}>
+          {!heroPhotoUrl && (
+            <div className="flex justify-center">
+              <Logo variant="wordmark" />
+            </div>
+          )}
+          <p
+            className={`font-script text-3xl ${
+              heroPhotoUrl ? "mt-0 text-white/90" : "mt-8 text-accent"
+            }`}
           >
-            Conheça a CCVN
-          </Link>
-          <Link
-            href="/eventos"
-            className="rounded-full bg-accent text-accent-foreground px-6 py-3 text-sm hover:opacity-90 transition-opacity"
+            {settings.hero_subtitle}
+          </p>
+          <h1
+            className={`mt-4 font-serif text-3xl md:text-5xl max-w-3xl mx-auto text-balance ${
+              heroPhotoUrl ? "text-white" : ""
+            }`}
           >
-            Ver eventos
-          </Link>
+            {settings.hero_title}
+          </h1>
+          <div className="mt-10 flex items-center justify-center gap-4">
+            <Link
+              href="/sobre"
+              className={
+                heroPhotoUrl
+                  ? "rounded-full border border-white px-6 py-3 text-sm text-white hover:bg-white hover:text-foreground transition-colors"
+                  : "rounded-full border border-foreground px-6 py-3 text-sm hover:bg-foreground hover:text-background transition-colors"
+              }
+            >
+              Conheça a CCVN
+            </Link>
+            <Link
+              href="/eventos"
+              className="rounded-full bg-accent text-accent-foreground px-6 py-3 text-sm hover:opacity-90 transition-opacity"
+            >
+              Ver eventos
+            </Link>
+          </div>
         </div>
       </section>
 

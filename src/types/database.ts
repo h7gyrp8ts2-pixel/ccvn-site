@@ -39,6 +39,7 @@ export interface SiteSettingsRow {
   id: number;
   hero_title: string;
   hero_subtitle: string;
+  hero_photo_path: string | null;
   about_quem_somos: string;
   about_missao: string;
   about_visao: string;

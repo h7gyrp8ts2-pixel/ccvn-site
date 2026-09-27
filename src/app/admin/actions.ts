@@ -15,7 +15,9 @@ const bucketPaths: Record<ImageBucket, { admin: string; public: string }> = {
   sobre: { admin: "/admin/conteudo", public: "/sobre" },
 };
 
-async function uploadToBucket(bucket: "ministerios" | "posts", file: File) {
+type ContentBucket = "ministerios" | "posts" | "hero";
+
+async function uploadToBucket(bucket: ContentBucket, file: File) {
   const supabase = createAdminClient();
   const ext = file.name.split(".").pop() ?? "jpg";
   const path = `${crypto.randomUUID()}.${ext}`;
@@ -28,7 +30,7 @@ async function uploadToBucket(bucket: "ministerios" | "posts", file: File) {
   return path;
 }
 
-async function removeFromBucket(bucket: "ministerios" | "posts", path: string | null) {
+async function removeFromBucket(bucket: ContentBucket, path: string | null) {
   if (!path) return;
   const supabase = createAdminClient();
   await supabase.storage.from(bucket).remove([path]);
@@ -167,28 +169,47 @@ export async function deleteImageAction(bucket: ImageBucket, path: string) {
 export async function updateSiteSettingsAction(formData: FormData) {
   const supabase = createAdminClient();
 
-  const { error } = await supabase
-    .from("site_settings")
-    .update({
-      hero_title: String(formData.get("hero_title") ?? ""),
-      hero_subtitle: String(formData.get("hero_subtitle") ?? ""),
-      about_quem_somos: String(formData.get("about_quem_somos") ?? ""),
-      about_missao: String(formData.get("about_missao") ?? ""),
-      about_visao: String(formData.get("about_visao") ?? ""),
-      address_line1: String(formData.get("address_line1") ?? ""),
-      address_line2: String(formData.get("address_line2") ?? ""),
-      maps_query: String(formData.get("maps_query") ?? ""),
-      email: String(formData.get("email") ?? ""),
-      instagram: String(formData.get("instagram") ?? ""),
-      facebook: String(formData.get("facebook") ?? ""),
-      youtube: String(formData.get("youtube") ?? ""),
-      twint_number: String(formData.get("twint_number") ?? ""),
-      account_holder: String(formData.get("account_holder") ?? ""),
-      iban: String(formData.get("iban") ?? ""),
-      payment_notes: String(formData.get("payment_notes") ?? ""),
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", 1);
+  const heroPhoto = formData.get("hero_photo") as File | null;
+  const removeHeroPhoto = formData.get("remove_hero_photo") === "on";
+  const update: Record<string, unknown> = {
+    hero_title: String(formData.get("hero_title") ?? ""),
+    hero_subtitle: String(formData.get("hero_subtitle") ?? ""),
+    about_quem_somos: String(formData.get("about_quem_somos") ?? ""),
+    about_missao: String(formData.get("about_missao") ?? ""),
+    about_visao: String(formData.get("about_visao") ?? ""),
+    address_line1: String(formData.get("address_line1") ?? ""),
+    address_line2: String(formData.get("address_line2") ?? ""),
+    maps_query: String(formData.get("maps_query") ?? ""),
+    email: String(formData.get("email") ?? ""),
+    instagram: String(formData.get("instagram") ?? ""),
+    facebook: String(formData.get("facebook") ?? ""),
+    youtube: String(formData.get("youtube") ?? ""),
+    twint_number: String(formData.get("twint_number") ?? ""),
+    account_holder: String(formData.get("account_holder") ?? ""),
+    iban: String(formData.get("iban") ?? ""),
+    payment_notes: String(formData.get("payment_notes") ?? ""),
+    updated_at: new Date().toISOString(),
+  };
+
+  if (heroPhoto && heroPhoto.size > 0) {
+    const { data: current } = await supabase
+      .from("site_settings")
+      .select("hero_photo_path")
+      .eq("id", 1)
+      .maybeSingle();
+    await removeFromBucket("hero", current?.hero_photo_path ?? null);
+    update.hero_photo_path = await uploadToBucket("hero", heroPhoto);
+  } else if (removeHeroPhoto) {
+    const { data: current } = await supabase
+      .from("site_settings")
+      .select("hero_photo_path")
+      .eq("id", 1)
+      .maybeSingle();
+    await removeFromBucket("hero", current?.hero_photo_path ?? null);
+    update.hero_photo_path = null;
+  }
+
+  const { error } = await supabase.from("site_settings").update(update).eq("id", 1);
 
   if (error) throw error;
 

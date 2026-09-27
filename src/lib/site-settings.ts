@@ -5,6 +5,7 @@ const fallback: SiteSettingsRow = {
   id: 1,
   hero_title: "Um lugar para viver fé, comunhão e propósito juntos.",
   hero_subtitle: "bem-vindos à nossa comunidade",
+  hero_photo_path: null,
   about_quem_somos: "",
   about_missao: "",
   about_visao: "",
