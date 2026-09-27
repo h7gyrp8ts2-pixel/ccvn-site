@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins, League_Script, Fraunces } from "next/font/google";
+import { Poppins, Petit_Formal_Script, Fraunces } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -10,8 +10,8 @@ const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
 });
 
-const leagueScript = League_Script({
-  variable: "--font-league-script",
+const petitFormalScript = Petit_Formal_Script({
+  variable: "--font-petit-formal-script",
   subsets: ["latin"],
   weight: ["400"],
 });
@@ -32,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="pt-BR"
-      className={`${poppins.variable} ${leagueScript.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${poppins.variable} ${petitFormalScript.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <SiteHeader />
