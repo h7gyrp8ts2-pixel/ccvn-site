@@ -12,7 +12,7 @@ export default async function SobrePage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-20">
       <p className="font-script text-2xl text-accent">quem somos</p>
-      <h1 className="mt-2 font-serif text-4xl">Sobre e nossa missão</h1>
+      <h1 className="mt-2 font-sans font-semibold text-4xl">Sobre e nossa missão</h1>
 
       <p className="mt-8 leading-relaxed text-muted">{settings.about_quem_somos}</p>
 

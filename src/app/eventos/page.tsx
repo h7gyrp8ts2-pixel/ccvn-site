@@ -9,7 +9,7 @@ export default async function EventosPage() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-20">
       <p className="font-script text-2xl text-accent">participe com a gente</p>
-      <h1 className="mt-2 font-serif text-4xl">Eventos</h1>
+      <h1 className="mt-2 font-sans font-semibold text-4xl">Eventos</h1>
 
       {events.length === 0 ? (
         <p className="mt-10 text-sm text-muted">

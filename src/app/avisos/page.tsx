@@ -10,7 +10,7 @@ export default async function AvisosPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-20">
       <p className="font-script text-2xl text-accent">fique por dentro</p>
-      <h1 className="mt-2 font-serif text-4xl">Avisos e atividades</h1>
+      <h1 className="mt-2 font-sans font-semibold text-4xl">Avisos e atividades</h1>
 
       <div className="mt-10 flex flex-col gap-6">
         {posts.map((post) => (

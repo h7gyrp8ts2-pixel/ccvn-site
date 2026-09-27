@@ -27,7 +27,7 @@ export default async function ConfirmacaoPage({
   return (
     <div className="mx-auto max-w-lg px-6 py-20">
       <p className="font-script text-2xl text-accent">inscrição recebida</p>
-      <h1 className="mt-2 font-serif text-3xl">Obrigado, {registration.name.split(" ")[0]}!</h1>
+      <h1 className="mt-2 font-sans font-semibold text-3xl">Obrigado, {registration.name.split(" ")[0]}!</h1>
       <p className="mt-4 text-muted">
         Sua vaga para <strong className="text-foreground">{event.name}</strong> está
         reservada. Para garantir a vaga, complete o pagamento até a data

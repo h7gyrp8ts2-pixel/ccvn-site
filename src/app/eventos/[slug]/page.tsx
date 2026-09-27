@@ -21,7 +21,7 @@ export default async function EventPage({
   return (
     <div className="mx-auto max-w-3xl px-6 py-20">
       <p className="text-sm text-muted">{formatEventDate(event.event_date)}</p>
-      <h1 className="mt-2 font-serif text-4xl">{event.name}</h1>
+      <h1 className="mt-2 font-sans font-semibold text-4xl">{event.name}</h1>
       <p className="mt-2 text-muted">{event.location}</p>
 
       {event.description && (

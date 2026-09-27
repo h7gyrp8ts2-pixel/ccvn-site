@@ -17,7 +17,7 @@ export default async function ContatoPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-20">
       <p className="font-script text-2xl text-accent">venha nos visitar</p>
-      <h1 className="mt-2 font-serif text-4xl">Contato e localização</h1>
+      <h1 className="mt-2 font-sans font-semibold text-4xl">Contato e localização</h1>
 
       <div className="mt-10 grid gap-10 md:grid-cols-2">
         <div>

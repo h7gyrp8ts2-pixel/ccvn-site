@@ -9,7 +9,7 @@ export default async function MinisteriosPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-20">
       <p className="font-script text-2xl text-accent">como servimos</p>
-      <h1 className="mt-2 font-serif text-4xl">Ministérios</h1>
+      <h1 className="mt-2 font-sans font-semibold text-4xl">Ministérios</h1>
 
       <ul className="mt-10 divide-y divide-border">
         {ministries.map((m) => (

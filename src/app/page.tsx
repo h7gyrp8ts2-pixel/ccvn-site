@@ -54,7 +54,7 @@ export default async function HomePage() {
             {settings.hero_subtitle}
           </p>
           <h1
-            className={`mt-4 font-serif text-3xl md:text-5xl max-w-3xl mx-auto text-balance ${
+            className={`mt-4 font-sans font-semibold text-3xl md:text-5xl max-w-3xl mx-auto text-balance ${
               heroPhotoUrl ? "text-white" : ""
             }`}
           >
