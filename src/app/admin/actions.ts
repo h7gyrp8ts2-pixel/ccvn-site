@@ -15,6 +15,25 @@ const bucketPaths: Record<ImageBucket, { admin: string; public: string }> = {
   sobre: { admin: "/admin/conteudo", public: "/sobre" },
 };
 
+async function uploadToBucket(bucket: "ministerios" | "posts", file: File) {
+  const supabase = createAdminClient();
+  const ext = file.name.split(".").pop() ?? "jpg";
+  const path = `${crypto.randomUUID()}.${ext}`;
+
+  const { error } = await supabase.storage
+    .from(bucket)
+    .upload(path, file, { contentType: file.type });
+
+  if (error) throw error;
+  return path;
+}
+
+async function removeFromBucket(bucket: "ministerios" | "posts", path: string | null) {
+  if (!path) return;
+  const supabase = createAdminClient();
+  await supabase.storage.from(bucket).remove([path]);
+}
+
 export async function loginAction(_prevState: { error?: string } | undefined, formData: FormData) {
   const password = String(formData.get("password") ?? "");
 
@@ -151,6 +170,8 @@ export async function updateSiteSettingsAction(formData: FormData) {
   const { error } = await supabase
     .from("site_settings")
     .update({
+      hero_title: String(formData.get("hero_title") ?? ""),
+      hero_subtitle: String(formData.get("hero_subtitle") ?? ""),
       about_quem_somos: String(formData.get("about_quem_somos") ?? ""),
       about_missao: String(formData.get("about_missao") ?? ""),
       about_visao: String(formData.get("about_visao") ?? ""),
@@ -172,6 +193,8 @@ export async function updateSiteSettingsAction(formData: FormData) {
   if (error) throw error;
 
   revalidatePath("/admin/configuracoes");
+  revalidatePath("/admin/conteudo");
+  revalidatePath("/");
   revalidatePath("/sobre");
   revalidatePath("/contato");
   revalidatePath("/eventos", "layout");
@@ -179,11 +202,14 @@ export async function updateSiteSettingsAction(formData: FormData) {
 
 export async function createMinistryAction(formData: FormData) {
   const supabase = createAdminClient();
+  const photo = formData.get("photo") as File | null;
+  const photoPath = photo && photo.size > 0 ? await uploadToBucket("ministerios", photo) : null;
 
   const { error } = await supabase.from("ministries").insert({
     name: String(formData.get("name") ?? "").trim(),
     description: String(formData.get("description") ?? ""),
     position: Number(formData.get("position") ?? 0),
+    photo_path: photoPath,
   });
 
   if (error) throw error;
@@ -194,15 +220,34 @@ export async function createMinistryAction(formData: FormData) {
 
 export async function updateMinistryAction(ministryId: string, formData: FormData) {
   const supabase = createAdminClient();
+  const photo = formData.get("photo") as File | null;
+  const removePhoto = formData.get("remove_photo") === "on";
 
-  const { error } = await supabase
-    .from("ministries")
-    .update({
-      name: String(formData.get("name") ?? "").trim(),
-      description: String(formData.get("description") ?? ""),
-      position: Number(formData.get("position") ?? 0),
-    })
-    .eq("id", ministryId);
+  const update: Record<string, unknown> = {
+    name: String(formData.get("name") ?? "").trim(),
+    description: String(formData.get("description") ?? ""),
+    position: Number(formData.get("position") ?? 0),
+  };
+
+  if (photo && photo.size > 0) {
+    const { data: current } = await supabase
+      .from("ministries")
+      .select("photo_path")
+      .eq("id", ministryId)
+      .maybeSingle();
+    await removeFromBucket("ministerios", current?.photo_path ?? null);
+    update.photo_path = await uploadToBucket("ministerios", photo);
+  } else if (removePhoto) {
+    const { data: current } = await supabase
+      .from("ministries")
+      .select("photo_path")
+      .eq("id", ministryId)
+      .maybeSingle();
+    await removeFromBucket("ministerios", current?.photo_path ?? null);
+    update.photo_path = null;
+  }
+
+  const { error } = await supabase.from("ministries").update(update).eq("id", ministryId);
 
   if (error) throw error;
 
@@ -212,9 +257,56 @@ export async function updateMinistryAction(ministryId: string, formData: FormDat
 
 export async function deleteMinistryAction(ministryId: string) {
   const supabase = createAdminClient();
+  const { data: current } = await supabase
+    .from("ministries")
+    .select("photo_path")
+    .eq("id", ministryId)
+    .maybeSingle();
+
   const { error } = await supabase.from("ministries").delete().eq("id", ministryId);
   if (error) throw error;
 
+  await removeFromBucket("ministerios", current?.photo_path ?? null);
+
   revalidatePath("/admin/ministerios");
   revalidatePath("/ministerios");
+}
+
+export async function createPostAction(formData: FormData) {
+  const supabase = createAdminClient();
+  const image = formData.get("image") as File | null;
+  const imagePath = image && image.size > 0 ? await uploadToBucket("posts", image) : null;
+  const eventDate = String(formData.get("event_date") ?? "");
+
+  const { error } = await supabase.from("posts").insert({
+    title: String(formData.get("title") ?? "").trim(),
+    description: String(formData.get("description") ?? ""),
+    external_link: String(formData.get("external_link") ?? "") || null,
+    event_date: eventDate ? new Date(eventDate).toISOString() : null,
+    image_path: imagePath,
+  });
+
+  if (error) throw error;
+
+  revalidatePath("/admin/avisos");
+  revalidatePath("/avisos");
+  revalidatePath("/");
+}
+
+export async function deletePostAction(postId: string) {
+  const supabase = createAdminClient();
+  const { data: current } = await supabase
+    .from("posts")
+    .select("image_path")
+    .eq("id", postId)
+    .maybeSingle();
+
+  const { error } = await supabase.from("posts").delete().eq("id", postId);
+  if (error) throw error;
+
+  await removeFromBucket("posts", current?.image_path ?? null);
+
+  revalidatePath("/admin/avisos");
+  revalidatePath("/avisos");
+  revalidatePath("/");
 }

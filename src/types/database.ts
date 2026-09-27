@@ -37,6 +37,8 @@ export interface RegistrationViewRow extends RegistrationRow {
 
 export interface SiteSettingsRow {
   id: number;
+  hero_title: string;
+  hero_subtitle: string;
   about_quem_somos: string;
   about_missao: string;
   about_visao: string;
@@ -59,5 +61,16 @@ export interface MinistryRow {
   name: string;
   description: string;
   position: number;
+  photo_path: string | null;
+  created_at: string;
+}
+
+export interface PostRow {
+  id: string;
+  title: string;
+  description: string;
+  image_path: string | null;
+  external_link: string | null;
+  event_date: string | null;
   created_at: string;
 }

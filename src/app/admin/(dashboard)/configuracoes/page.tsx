@@ -14,6 +14,8 @@ export default async function AdminConfiguracoesPage() {
         action={updateSiteSettingsAction}
         className="mt-6 grid gap-6 md:grid-cols-2 rounded-2xl border border-border p-6"
       >
+        <input type="hidden" name="hero_title" value={settings.hero_title} />
+        <input type="hidden" name="hero_subtitle" value={settings.hero_subtitle} />
         <input type="hidden" name="about_quem_somos" value={settings.about_quem_somos} />
         <input type="hidden" name="about_missao" value={settings.about_missao} />
         <input type="hidden" name="about_visao" value={settings.about_visao} />

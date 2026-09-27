@@ -1,5 +1,10 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 
+export function getPublicImageUrl(bucket: string, path: string) {
+  const supabase = createAdminClient();
+  return supabase.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+}
+
 export async function getBucketImages(bucket: string) {
   const supabase = createAdminClient();
   const { data, error } = await supabase.storage

@@ -8,16 +8,19 @@ export default function AdminDashboardLayout({
 }) {
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
-      <div className="flex items-center justify-between border-b border-border pb-6">
-        <nav className="flex items-center gap-6 text-sm">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-6">
+        <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
           <Link href="/admin" className="font-medium">
             Admin
           </Link>
           <Link href="/admin/eventos" className="text-muted hover:text-foreground">
             Eventos
           </Link>
+          <Link href="/admin/avisos" className="text-muted hover:text-foreground">
+            Avisos
+          </Link>
           <Link href="/admin/conteudo" className="text-muted hover:text-foreground">
-            Sobre
+            Conteúdo
           </Link>
           <Link href="/admin/ministerios" className="text-muted hover:text-foreground">
             Ministérios

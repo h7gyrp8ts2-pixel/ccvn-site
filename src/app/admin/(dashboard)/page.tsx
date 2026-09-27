@@ -2,8 +2,9 @@ import Link from "next/link";
 
 const cards = [
   { href: "/admin/eventos", title: "Eventos", description: "Criar, editar e ver inscritos de cada evento." },
-  { href: "/admin/conteudo", title: "Sobre", description: "Editar o texto de Sobre/Missão e as fotos da página." },
-  { href: "/admin/ministerios", title: "Ministérios", description: "Adicionar, editar ou remover ministérios." },
+  { href: "/admin/avisos", title: "Avisos", description: "Publicar flyers de atividades ou eventos externos, sem inscrição." },
+  { href: "/admin/conteudo", title: "Conteúdo", description: "Editar o hero da home, o texto de Sobre e as fotos da página." },
+  { href: "/admin/ministerios", title: "Ministérios", description: "Adicionar, editar, remover e colocar foto de cada ministério." },
   { href: "/admin/galeria", title: "Galeria", description: "Adicionar ou remover fotos da galeria pública." },
   { href: "/admin/configuracoes", title: "Configurações", description: "Endereço, redes sociais e dados de pagamento." },
 ];

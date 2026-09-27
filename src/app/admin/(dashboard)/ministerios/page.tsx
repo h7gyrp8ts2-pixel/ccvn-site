@@ -1,4 +1,5 @@
 import { getMinistries } from "@/lib/ministries";
+import { getPublicImageUrl } from "@/lib/photos";
 import {
   createMinistryAction,
   updateMinistryAction,
@@ -48,6 +49,10 @@ export default async function AdminMinisteriosPage() {
             />
           </div>
           <div>
+            <label className="block text-sm text-muted mb-1">Foto (opcional)</label>
+            <input type="file" name="photo" accept="image/*" />
+          </div>
+          <div>
             <button
               type="submit"
               className="rounded-full bg-foreground text-background px-6 py-2 text-sm"
@@ -94,6 +99,26 @@ export default async function AdminMinisteriosPage() {
                   defaultValue={ministry.position}
                   className="w-32 rounded-lg border border-border px-3 py-2 bg-surface"
                 />
+              </div>
+              {ministry.photo_path && (
+                <div className="flex items-center gap-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={getPublicImageUrl("ministerios", ministry.photo_path)}
+                    alt=""
+                    className="w-20 h-20 object-cover rounded-lg border border-border"
+                  />
+                  <label className="flex items-center gap-2 text-sm text-muted">
+                    <input type="checkbox" name="remove_photo" />
+                    remover foto atual
+                  </label>
+                </div>
+              )}
+              <div>
+                <label className="block text-sm text-muted mb-1">
+                  {ministry.photo_path ? "Trocar foto" : "Foto (opcional)"}
+                </label>
+                <input type="file" name="photo" accept="image/*" />
               </div>
               <div className="flex items-center gap-3">
                 <button
