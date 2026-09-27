@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { updateEventAction, confirmRegistrationAction } from "@/app/admin/actions";
 import { toDatetimeLocalValue } from "@/lib/format";
+import { getPublicImageUrl } from "@/lib/photos";
 import type { EventRow, RegistrationViewRow } from "@/types/database";
 
 export const dynamic = "force-dynamic";
@@ -124,6 +125,26 @@ export default async function AdminEventDetailPage({
             <option value="encerrado">Encerrado</option>
           </select>
         </div>
+        {typedEvent.image_path && (
+          <div className="md:col-span-2 flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={getPublicImageUrl("eventos", typedEvent.image_path)}
+              alt=""
+              className="w-24 h-24 object-cover rounded-lg border border-border"
+            />
+            <label className="flex items-center gap-2 text-sm text-muted">
+              <input type="checkbox" name="remove_image" />
+              remover imagem atual
+            </label>
+          </div>
+        )}
+        <div className="md:col-span-2">
+          <label className="block text-sm text-muted mb-1">
+            {typedEvent.image_path ? "Trocar imagem / flyer" : "Imagem / flyer (opcional)"}
+          </label>
+          <input type="file" name="image" accept="image/*" />
+        </div>
         <div className="md:col-span-2">
           <button
             type="submit"
@@ -142,9 +163,11 @@ export default async function AdminEventDetailPage({
           <div key={r.id} className="flex items-center justify-between py-4 gap-4">
             <div>
               <p className="font-medium">{r.name}</p>
-              <p className="text-sm text-muted">
-                {r.email} · {r.phone}
-              </p>
+              {(r.email || r.phone) && (
+                <p className="text-sm text-muted">
+                  {[r.email, r.phone].filter(Boolean).join(" · ")}
+                </p>
+              )}
             </div>
             <div className="flex items-center gap-3">
               <span

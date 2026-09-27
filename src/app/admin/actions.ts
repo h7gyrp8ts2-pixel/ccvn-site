@@ -15,7 +15,7 @@ const bucketPaths: Record<ImageBucket, { admin: string; public: string }> = {
   sobre: { admin: "/admin/conteudo", public: "/sobre" },
 };
 
-type ContentBucket = "ministerios" | "posts" | "hero";
+type ContentBucket = "ministerios" | "posts" | "hero" | "eventos";
 
 async function uploadToBucket(bucket: ContentBucket, file: File) {
   const supabase = createAdminClient();
@@ -73,6 +73,8 @@ function slugify(value: string) {
 export async function createEventAction(formData: FormData) {
   const supabase = createAdminClient();
   const name = String(formData.get("name") ?? "").trim();
+  const image = formData.get("image") as File | null;
+  const imagePath = image && image.size > 0 ? await uploadToBucket("eventos", image) : null;
 
   const { error } = await supabase.from("events").insert({
     name,
@@ -84,6 +86,7 @@ export async function createEventAction(formData: FormData) {
     max_spots: Number(formData.get("max_spots") ?? 0),
     reservation_days: Number(formData.get("reservation_days") ?? 7),
     status: "ativo",
+    image_path: imagePath,
   });
 
   if (error) throw error;
@@ -97,20 +100,39 @@ export async function createEventAction(formData: FormData) {
 export async function updateEventAction(eventId: string, formData: FormData) {
   const supabase = createAdminClient();
   const name = String(formData.get("name") ?? "").trim();
+  const image = formData.get("image") as File | null;
+  const removeImage = formData.get("remove_image") === "on";
 
-  const { error } = await supabase
-    .from("events")
-    .update({
-      name,
-      description: String(formData.get("description") ?? ""),
-      event_date: new Date(String(formData.get("event_date"))).toISOString(),
-      location: String(formData.get("location") ?? ""),
-      price_chf: Number(formData.get("price_chf") ?? 0),
-      max_spots: Number(formData.get("max_spots") ?? 0),
-      reservation_days: Number(formData.get("reservation_days") ?? 7),
-      status: String(formData.get("status") ?? "ativo") as EventStatus,
-    })
-    .eq("id", eventId);
+  const update: Record<string, unknown> = {
+    name,
+    description: String(formData.get("description") ?? ""),
+    event_date: new Date(String(formData.get("event_date"))).toISOString(),
+    location: String(formData.get("location") ?? ""),
+    price_chf: Number(formData.get("price_chf") ?? 0),
+    max_spots: Number(formData.get("max_spots") ?? 0),
+    reservation_days: Number(formData.get("reservation_days") ?? 7),
+    status: String(formData.get("status") ?? "ativo") as EventStatus,
+  };
+
+  if (image && image.size > 0) {
+    const { data: current } = await supabase
+      .from("events")
+      .select("image_path")
+      .eq("id", eventId)
+      .maybeSingle();
+    await removeFromBucket("eventos", current?.image_path ?? null);
+    update.image_path = await uploadToBucket("eventos", image);
+  } else if (removeImage) {
+    const { data: current } = await supabase
+      .from("events")
+      .select("image_path")
+      .eq("id", eventId)
+      .maybeSingle();
+    await removeFromBucket("eventos", current?.image_path ?? null);
+    update.image_path = null;
+  }
+
+  const { error } = await supabase.from("events").update(update).eq("id", eventId);
 
   if (error) throw error;
 

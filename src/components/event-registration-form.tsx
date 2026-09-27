@@ -6,9 +6,11 @@ import { registerForEventAction } from "@/app/eventos/actions";
 export function EventRegistrationForm({
   eventId,
   eventSlug,
+  isPaid,
 }: {
   eventId: string;
   eventSlug: string;
+  isPaid: boolean;
 }) {
   const action = registerForEventAction.bind(null, eventId, eventSlug);
   const [state, formAction, pending] = useActionState(action, undefined);
@@ -28,25 +30,25 @@ export function EventRegistrationForm({
       </div>
       <div>
         <label htmlFor="email" className="block text-sm text-muted mb-1">
-          E-mail
+          E-mail{!isPaid && " (opcional)"}
         </label>
         <input
           id="email"
           name="email"
           type="email"
-          required
+          required={isPaid}
           className="w-full rounded-lg border border-border px-3 py-2 bg-surface"
         />
       </div>
       <div>
         <label htmlFor="phone" className="block text-sm text-muted mb-1">
-          Telefone
+          Telefone{!isPaid && " (opcional)"}
         </label>
         <input
           id="phone"
           name="phone"
           type="tel"
-          required
+          required={isPaid}
           className="w-full rounded-lg border border-border px-3 py-2 bg-surface"
         />
       </div>

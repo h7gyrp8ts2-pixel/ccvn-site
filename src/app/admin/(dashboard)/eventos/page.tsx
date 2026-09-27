@@ -98,6 +98,12 @@ export default async function AdminEventosPage() {
             />
           </div>
           <div className="md:col-span-2">
+            <label className="block text-sm text-muted mb-1">
+              Imagem / flyer (opcional)
+            </label>
+            <input type="file" name="image" accept="image/*" />
+          </div>
+          <div className="md:col-span-2">
             <button
               type="submit"
               className="rounded-full bg-foreground text-background px-6 py-2 text-sm"

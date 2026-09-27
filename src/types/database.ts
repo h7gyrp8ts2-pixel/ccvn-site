@@ -13,6 +13,7 @@ export interface EventRow {
   max_spots: number;
   reservation_days: number;
   status: EventStatus;
+  image_path: string | null;
   created_at: string;
 }
 
@@ -24,8 +25,8 @@ export interface RegistrationRow {
   id: string;
   event_id: string;
   name: string;
-  email: string;
-  phone: string;
+  email: string | null;
+  phone: string | null;
   status: RegistrationStatus;
   created_at: string;
   expires_at: string;

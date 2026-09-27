@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getEventBySlug } from "@/lib/events";
 import { formatEventDate, formatCHF } from "@/lib/format";
 import { EventRegistrationForm } from "@/components/event-registration-form";
+import { getPublicImageUrl } from "@/lib/photos";
 
 export const dynamic = "force-dynamic";
 
@@ -17,12 +18,24 @@ export default async function EventPage({
 
   const full = event.spots_remaining <= 0;
   const closed = event.status !== "ativo";
+  const isPaid = event.price_chf > 0;
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-20">
       <p className="text-sm text-muted">{formatEventDate(event.event_date)}</p>
       <h1 className="mt-2 font-sans font-semibold text-4xl">{event.name}</h1>
       <p className="mt-2 text-muted">{event.location}</p>
+
+      {event.image_path && (
+        <div className="mt-8 bg-surface flex justify-center max-h-[560px] overflow-hidden rounded-2xl border border-border">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={getPublicImageUrl("eventos", event.image_path)}
+            alt=""
+            className="max-w-full max-h-[560px] object-contain"
+          />
+        </div>
+      )}
 
       {event.description && (
         <p className="mt-8 leading-relaxed">{event.description}</p>
@@ -31,7 +44,9 @@ export default async function EventPage({
       <div className="mt-10 rounded-2xl border border-border p-6">
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted">Valor</span>
-          <span className="font-medium">{formatCHF(event.price_chf)}</span>
+          <span className="font-medium">
+            {isPaid ? formatCHF(event.price_chf) : "Gratuito"}
+          </span>
         </div>
         <div className="mt-2 flex items-center justify-between text-sm">
           <span className="text-muted">Vagas restantes</span>
@@ -51,7 +66,7 @@ export default async function EventPage({
         ) : (
           <>
             <h2 className="font-serif text-xl mb-4">Inscreva-se</h2>
-            <EventRegistrationForm eventId={event.id} eventSlug={event.slug} />
+            <EventRegistrationForm eventId={event.id} eventSlug={event.slug} isPaid={isPaid} />
           </>
         )}
       </div>
