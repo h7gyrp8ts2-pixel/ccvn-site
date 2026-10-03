@@ -14,6 +14,8 @@ export interface EventRow {
   reservation_days: number;
   status: EventStatus;
   image_path: string | null;
+  show_spots: boolean;
+  show_price: boolean;
   created_at: string;
 }
 
@@ -74,5 +76,13 @@ export interface PostRow {
   image_path: string | null;
   external_link: string | null;
   event_date: string | null;
+  created_at: string;
+}
+
+export interface PrayerRequestRow {
+  id: string;
+  name: string | null;
+  contact: string | null;
+  message: string;
   created_at: string;
 }

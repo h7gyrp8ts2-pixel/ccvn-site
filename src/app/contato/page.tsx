@@ -1,4 +1,5 @@
 import { getSiteSettings } from "@/lib/site-settings";
+import { PrayerRequestForm } from "@/components/prayer-request-form";
 
 export const dynamic = "force-dynamic";
 
@@ -65,6 +66,16 @@ export default async function ContatoPage() {
           />
         </div>
       </div>
+
+      <section className="mt-16 border-t border-border pt-12">
+        <p className="font-script text-2xl text-accent">podemos orar por você?</p>
+        <h2 className="mt-1 font-serif text-2xl">Pedido de oração</h2>
+        <p className="mt-2 mb-6 text-muted leading-relaxed">
+          Compartilhe o que está no seu coração. Seu pedido é recebido pela
+          equipe da igreja, que vai orar por você.
+        </p>
+        <PrayerRequestForm />
+      </section>
     </div>
   );
 }

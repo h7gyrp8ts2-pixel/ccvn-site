@@ -86,6 +86,8 @@ export async function createEventAction(formData: FormData) {
     max_spots: Number(formData.get("max_spots") ?? 0),
     reservation_days: Number(formData.get("reservation_days") ?? 7),
     status: "ativo",
+    show_spots: formData.get("show_spots") === "on",
+    show_price: formData.get("show_price") === "on",
     image_path: imagePath,
   });
 
@@ -112,6 +114,8 @@ export async function updateEventAction(eventId: string, formData: FormData) {
     max_spots: Number(formData.get("max_spots") ?? 0),
     reservation_days: Number(formData.get("reservation_days") ?? 7),
     status: String(formData.get("status") ?? "ativo") as EventStatus,
+    show_spots: formData.get("show_spots") === "on",
+    show_price: formData.get("show_price") === "on",
   };
 
   if (image && image.size > 0) {
@@ -352,4 +356,32 @@ export async function deletePostAction(postId: string) {
   revalidatePath("/admin/avisos");
   revalidatePath("/avisos");
   revalidatePath("/");
+}
+
+export async function deleteEventAction(eventId: string) {
+  const supabase = createAdminClient();
+  const { data: current } = await supabase
+    .from("events")
+    .select("image_path")
+    .eq("id", eventId)
+    .maybeSingle();
+
+  // As inscrições do evento são apagadas junto (on delete cascade).
+  const { error } = await supabase.from("events").delete().eq("id", eventId);
+  if (error) throw error;
+
+  await removeFromBucket("eventos", current?.image_path ?? null);
+
+  revalidatePath("/admin/eventos");
+  revalidatePath("/eventos");
+  revalidatePath("/");
+  redirect("/admin/eventos");
+}
+
+export async function deletePrayerRequestAction(requestId: string) {
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("prayer_requests").delete().eq("id", requestId);
+  if (error) throw error;
+
+  revalidatePath("/admin/oracoes");
 }

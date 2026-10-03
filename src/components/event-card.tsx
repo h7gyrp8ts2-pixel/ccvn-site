@@ -25,12 +25,19 @@ export function EventCard({ event }: { event: EventAvailabilityRow }) {
         <p className="text-sm text-muted">{formatShortDate(event.event_date)}</p>
         <h3 className="mt-2 font-serif text-xl">{event.name}</h3>
         <p className="mt-2 text-sm text-muted line-clamp-2">{event.description}</p>
-        <div className="mt-4 flex items-center justify-between text-sm">
-          <span>{event.price_chf > 0 ? formatCHF(event.price_chf) : "Gratuito"}</span>
-          <span className={full ? "text-muted" : "text-accent"}>
-            {full ? "Vagas esgotadas" : `${event.spots_remaining} vagas restantes`}
-          </span>
-        </div>
+        {(event.show_price || event.show_spots || full) && (
+          <div className="mt-4 flex items-center justify-between text-sm">
+            <span>
+              {event.show_price &&
+                (event.price_chf > 0 ? formatCHF(event.price_chf) : "Gratuito")}
+            </span>
+            {(event.show_spots || full) && (
+              <span className={full ? "text-muted" : "text-accent"}>
+                {full ? "Vagas esgotadas" : `${event.spots_remaining} vagas restantes`}
+              </span>
+            )}
+          </div>
+        )}
       </div>
     </Link>
   );

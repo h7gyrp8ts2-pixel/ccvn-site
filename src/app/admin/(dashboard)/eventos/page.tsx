@@ -97,6 +97,16 @@ export default async function AdminEventosPage() {
               className="w-full rounded-lg border border-border px-3 py-2 bg-surface"
             />
           </div>
+          <div className="md:col-span-2 flex flex-wrap gap-x-8 gap-y-2 text-sm">
+            <label className="flex items-center gap-2">
+              <input type="checkbox" name="show_price" defaultChecked />
+              Mostrar o valor no site
+            </label>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" name="show_spots" defaultChecked />
+              Mostrar a quantidade de vagas no site
+            </label>
+          </div>
           <div className="md:col-span-2">
             <label className="block text-sm text-muted mb-1">
               Imagem / flyer (opcional)

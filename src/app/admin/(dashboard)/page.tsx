@@ -6,6 +6,7 @@ const cards = [
   { href: "/admin/conteudo", title: "Conteúdo", description: "Editar o hero da home, o texto de Sobre e as fotos da página." },
   { href: "/admin/ministerios", title: "Ministérios", description: "Adicionar, editar, remover e colocar foto de cada ministério." },
   { href: "/admin/galeria", title: "Galeria", description: "Adicionar ou remover fotos da galeria pública." },
+  { href: "/admin/oracoes", title: "Orações", description: "Ver e apagar os pedidos de oração enviados pelo site." },
   { href: "/admin/configuracoes", title: "Configurações", description: "Endereço, redes sociais e dados de pagamento." },
 ];
 

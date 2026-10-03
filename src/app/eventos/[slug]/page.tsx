@@ -41,20 +41,26 @@ export default async function EventPage({
         <p className="mt-8 leading-relaxed">{event.description}</p>
       )}
 
-      <div className="mt-10 rounded-2xl border border-border p-6">
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-muted">Valor</span>
-          <span className="font-medium">
-            {isPaid ? formatCHF(event.price_chf) : "Gratuito"}
-          </span>
+      {(event.show_price || event.show_spots) && (
+        <div className="mt-10 rounded-2xl border border-border p-6 flex flex-col gap-2">
+          {event.show_price && (
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted">Valor</span>
+              <span className="font-medium">
+                {isPaid ? formatCHF(event.price_chf) : "Gratuito"}
+              </span>
+            </div>
+          )}
+          {event.show_spots && (
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted">Vagas restantes</span>
+              <span className={full ? "text-muted" : "text-accent font-medium"}>
+                {event.spots_remaining} / {event.max_spots}
+              </span>
+            </div>
+          )}
         </div>
-        <div className="mt-2 flex items-center justify-between text-sm">
-          <span className="text-muted">Vagas restantes</span>
-          <span className={full ? "text-muted" : "text-accent font-medium"}>
-            {event.spots_remaining} / {event.max_spots}
-          </span>
-        </div>
-      </div>
+      )}
 
       <div className="mt-10">
         {closed || full ? (

@@ -28,6 +28,9 @@ export default function AdminDashboardLayout({
           <Link href="/admin/galeria" className="text-muted hover:text-foreground">
             Galeria
           </Link>
+          <Link href="/admin/oracoes" className="text-muted hover:text-foreground">
+            Orações
+          </Link>
           <Link href="/admin/configuracoes" className="text-muted hover:text-foreground">
             Configurações
           </Link>
