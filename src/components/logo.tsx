@@ -1,9 +1,8 @@
 import Image from "next/image";
 
-// Logo oficial da CCVN: "mark" é o selo circular (cabeçalho/rodapé), e
-// "wordmark" é a lockup vertical usada em destaque (hero da home). As
-// imagens têm fundo branco puro; mix-blend-mode: multiply as funde com o
-// fundo levemente bege do site sem precisar de um PNG com transparência.
+// "mark" é o selo circular (PNG com fundo transparente, usado no cabeçalho);
+// "wordmark" é a lockup vertical do hero. O wordmark ainda é um JPG com fundo
+// branco, então mix-blend-mode: multiply o funde com o fundo bege do site.
 export function Logo({
   variant = "mark",
   className = "",
@@ -26,11 +25,11 @@ export function Logo({
 
   return (
     <Image
-      src="/logo/mark.webp"
+      src="/logo/mark.png"
       alt="Comunidade Cristã Vida Nova — CCVN Schweiz"
-      width={80}
-      height={80}
-      className={`w-9 h-9 mix-blend-multiply ${className}`}
+      width={127}
+      height={128}
+      className={`w-9 h-9 ${className}`}
     />
   );
 }
