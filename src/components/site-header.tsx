@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { Logo } from "@/components/logo";
@@ -26,11 +27,13 @@ export function SiteHeader() {
           onClick={() => setOpen(false)}
         >
           <Logo variant="mark" className="w-10 h-10" />
-          <span className="font-medium tracking-tight leading-none">
-            comunidade
-            <br />
-            cristã vida nova
-          </span>
+          <Image
+            src="/logo/header.png"
+            alt=""
+            width={248}
+            height={70}
+            className="h-9 w-auto"
+          />
         </Link>
         <nav className="hidden md:flex items-center gap-6 text-sm text-muted">
           {links.map((link) => (
