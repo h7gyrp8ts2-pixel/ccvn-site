@@ -74,7 +74,7 @@ export default async function ConfirmacaoPage({
                 <img
                   src={getPublicImageUrl("pagamento", paymentInfo.twint_qr_path)}
                   alt="QR code para pagamento via Twint"
-                  className="w-48 h-48 object-contain rounded-xl border border-border bg-white p-2"
+                  className="w-full max-w-xs h-auto rounded-xl border border-border bg-white"
                 />
                 <p className="mt-2 text-xs text-muted">Escaneie com o app Twint</p>
               </div>
