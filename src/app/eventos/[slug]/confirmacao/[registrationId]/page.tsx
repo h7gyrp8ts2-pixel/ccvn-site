@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { formatCHF, formatEventDate } from "@/lib/format";
 import { getSiteSettings } from "@/lib/site-settings";
+import { getPublicImageUrl } from "@/lib/photos";
 
 export const dynamic = "force-dynamic";
 
@@ -67,6 +68,17 @@ export default async function ConfirmacaoPage({
             <p>Titular: {paymentInfo.account_holder}</p>
             <p>IBAN: {paymentInfo.iban}</p>
             <p className="mt-3 text-xs text-muted">{paymentInfo.payment_notes}</p>
+            {paymentInfo.twint_qr_path && (
+              <div className="mt-6 flex flex-col items-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={getPublicImageUrl("pagamento", paymentInfo.twint_qr_path)}
+                  alt="QR code para pagamento via Twint"
+                  className="w-48 h-48 object-contain rounded-xl border border-border bg-white p-2"
+                />
+                <p className="mt-2 text-xs text-muted">Escaneie com o app Twint</p>
+              </div>
+            )}
           </div>
         )}
       </div>

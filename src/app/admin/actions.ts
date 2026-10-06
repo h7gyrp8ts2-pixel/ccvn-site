@@ -15,7 +15,7 @@ const bucketPaths: Record<ImageBucket, { admin: string; public: string }> = {
   sobre: { admin: "/admin/conteudo", public: "/sobre" },
 };
 
-type ContentBucket = "ministerios" | "posts" | "hero" | "eventos";
+type ContentBucket = "ministerios" | "posts" | "hero" | "eventos" | "pagamento";
 
 async function uploadToBucket(bucket: ContentBucket, file: File) {
   const supabase = createAdminClient();
@@ -233,6 +233,20 @@ export async function updateSiteSettingsAction(formData: FormData) {
       .maybeSingle();
     await removeFromBucket("hero", current?.hero_photo_path ?? null);
     update.hero_photo_path = null;
+  }
+
+  const twintQr = formData.get("twint_qr") as File | null;
+  const removeTwintQr = formData.get("remove_twint_qr") === "on";
+
+  if ((twintQr && twintQr.size > 0) || removeTwintQr) {
+    const { data: current } = await supabase
+      .from("site_settings")
+      .select("twint_qr_path")
+      .eq("id", 1)
+      .maybeSingle();
+    await removeFromBucket("pagamento", current?.twint_qr_path ?? null);
+    update.twint_qr_path =
+      twintQr && twintQr.size > 0 ? await uploadToBucket("pagamento", twintQr) : null;
   }
 
   const { error } = await supabase.from("site_settings").update(update).eq("id", 1);
