@@ -399,3 +399,14 @@ export async function deletePrayerRequestAction(requestId: string) {
 
   revalidatePath("/admin/oracoes");
 }
+
+export async function deleteRegistrationAction(eventId: string, registrationId: string) {
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("registrations").delete().eq("id", registrationId);
+  if (error) throw error;
+
+  revalidatePath(`/admin/eventos/${eventId}`);
+  revalidatePath("/admin/eventos");
+  revalidatePath("/eventos", "layout");
+  revalidatePath("/");
+}

@@ -4,6 +4,7 @@ import {
   updateEventAction,
   confirmRegistrationAction,
   deleteEventAction,
+  deleteRegistrationAction,
 } from "@/app/admin/actions";
 import { ConfirmForm } from "@/components/confirm-form";
 import { toDatetimeLocalValue } from "@/lib/format";
@@ -208,6 +209,14 @@ export default async function AdminEventDetailPage({
                   </button>
                 </form>
               )}
+              <ConfirmForm
+                action={deleteRegistrationAction.bind(null, typedEvent.id, r.id)}
+                message={`Excluir a inscrição de ${r.name}? A vaga volta a ficar disponível e não dá para desfazer.`}
+              >
+                <button type="submit" className="text-sm text-muted hover:text-red-700">
+                  Excluir
+                </button>
+              </ConfirmForm>
             </div>
           </div>
         ))}
